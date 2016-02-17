@@ -23,9 +23,11 @@ public class CardsProvider extends ContentProvider {
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PATH);
 
     private static final int CARDS = 10;
+    private static final int CARD_ID = 20;
 
     static {
         MATCHER.addURI(AUTHORITY, PATH, CARDS);
+        MATCHER.addURI(AUTHORITY, PATH + "/#", CARD_ID);
     }
 
     @Override
