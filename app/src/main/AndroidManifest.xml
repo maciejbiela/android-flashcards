@@ -20,7 +20,7 @@
         </activity>
         <provider
             android:authorities="io.github.maciejbiela.fiszki.provider"
-            android:name=".CardsProvider" />
+            android:name=".provider.CardsProvider" />
     </application>
 
 </manifest>
