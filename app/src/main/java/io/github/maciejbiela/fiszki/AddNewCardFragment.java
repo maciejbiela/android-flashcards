@@ -6,6 +6,11 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
 
 
 /**
@@ -13,6 +18,14 @@ import android.view.ViewGroup;
  */
 public class AddNewCardFragment extends Fragment {
 
+    @Bind(R.id.from_language)
+    EditText fromLanguage;
+
+    @Bind(R.id.to_language)
+    EditText toLanguage;
+
+    @Bind(R.id.save_card)
+    Button saveCard;
 
     public AddNewCardFragment() {
         // Required empty public constructor
@@ -22,8 +35,9 @@ public class AddNewCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_add_new_card, container, false);
+        View view = inflater.inflate(R.layout.fragment_add_new_card, container, false);
+        ButterKnife.bind(this, view);
+        return view;
     }
 
 }

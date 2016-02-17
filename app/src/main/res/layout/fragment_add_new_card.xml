@@ -6,13 +6,21 @@
     tools:context="io.github.maciejbiela.fiszki.AddNewCardFragment">
 
     <EditText
+        android:id="@+id/from_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Polski" />
 
     <EditText
+        android:id="@+id/to_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Angielski" />
+
+    <Button
+        android:id="@+id/save_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Zapisz fiszkę!" />
 
 </LinearLayout>
