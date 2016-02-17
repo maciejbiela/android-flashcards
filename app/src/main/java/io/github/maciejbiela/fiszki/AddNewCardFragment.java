@@ -1,8 +1,8 @@
 package io.github.maciejbiela.fiszki;
 
 
-import android.os.Bundle;
 import android.app.Fragment;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,6 +46,6 @@ public class AddNewCardFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-        Log.d("TEST", "I'm beeing clicked");
+        Log.d("TEST", "I'm being clicked");
     }
 }
