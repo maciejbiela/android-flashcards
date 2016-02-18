@@ -36,8 +36,8 @@ public class CardCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        String key = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_FROM_LANGUAGE));
-        String value = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_TO_LANGUAGE));
+        String key = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_MOTHER_LANGUAGE));
+        String value = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_FOREIGN_LANGUAGE));
         String category = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_CATEGORY));
         tvMotherLanguage.setText(key);
         tvForeignLanguage.setText(value);

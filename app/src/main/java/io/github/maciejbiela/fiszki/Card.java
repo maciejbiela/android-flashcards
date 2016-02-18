@@ -14,8 +14,8 @@ public class Card {
                               String inForeignLanguage,
                               String category) {
         ContentValues values = new ContentValues();
-        values.put(CardsTable.COLUMN_FROM_LANGUAGE, inMotherLanguage.toUpperCase());
-        values.put(CardsTable.COLUMN_TO_LANGUAGE, inForeignLanguage.toUpperCase());
+        values.put(CardsTable.COLUMN_MOTHER_LANGUAGE, inMotherLanguage.toUpperCase());
+        values.put(CardsTable.COLUMN_FOREIGN_LANGUAGE, inForeignLanguage.toUpperCase());
         values.put(CardsTable.COLUMN_CATEGORY, category.toUpperCase());
         try {
             contentResolver.insert(CardsProvider.CONTENT_URI, values);
