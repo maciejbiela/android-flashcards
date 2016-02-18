@@ -14,11 +14,14 @@ import io.github.maciejbiela.fiszki.database.CardsTable;
 
 public class CardCursorAdapter extends CursorAdapter {
 
-    @Bind(R.id.in_mother_language)
-    TextView inMotherLanguage;
+    @Bind(R.id.tv_mother_language)
+    TextView tvMotherLanguage;
 
-    @Bind(R.id.in_foreign_language)
-    TextView inForeignLanguage;
+    @Bind(R.id.tv_foreign_language)
+    TextView tvForeignLanguage;
+
+    @Bind(R.id.tv_category)
+    TextView tvCategory;
 
     public CardCursorAdapter(Context context, Cursor c) {
         super(context, c, 0);
@@ -35,7 +38,9 @@ public class CardCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         String key = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_FROM_LANGUAGE));
         String value = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_TO_LANGUAGE));
-        inMotherLanguage.setText(key);
-        inForeignLanguage.setText(value);
+        String category = cursor.getString(cursor.getColumnIndex(CardsTable.COLUMN_CATEGORY));
+        tvMotherLanguage.setText(key);
+        tvForeignLanguage.setText(value);
+        tvCategory.setText(category);
     }
 }

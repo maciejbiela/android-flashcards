@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -22,14 +23,17 @@ import butterknife.ButterKnife;
 public class AddNewCardFragment extends Fragment
         implements OnClickListener {
 
-    @Bind(R.id.from_language)
-    EditText fromLanguage;
+    @Bind(R.id.et_mother_language)
+    EditText etMotherLanguage;
 
-    @Bind(R.id.to_language)
-    EditText toLanguage;
+    @Bind(R.id.et_foreign_language)
+    EditText etForeignLanguage;
 
-    @Bind(R.id.save_card)
-    Button saveCard;
+    @Bind(R.id.sp_category)
+    Spinner spCategory;
+
+    @Bind(R.id.bt_save_card)
+    Button btSaveCard;
 
     public AddNewCardFragment() {
         // Required empty public constructor
@@ -41,19 +45,20 @@ public class AddNewCardFragment extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_new_card, container, false);
         ButterKnife.bind(this, view);
-        saveCard.setOnClickListener(this);
+        btSaveCard.setOnClickListener(this);
         return view;
     }
 
     @Override
     public void onClick(View v) {
-        String inMotherLanguage = fromLanguage.getText().toString();
-        String inForeignLanguage = toLanguage.getText().toString();
+        String motherLanguage = etMotherLanguage.getText().toString();
+        String foreignLanguage = etForeignLanguage.getText().toString();
+        String category = spCategory.getSelectedItem().toString();
 
         ContentResolver contentResolver = getContext().getContentResolver();
 
-        if (Card.add(contentResolver, inMotherLanguage, inForeignLanguage)) {
-            Log.d("INSERT", "New card created: " + inMotherLanguage + " -> " + inForeignLanguage);
+        if (Card.add(contentResolver, motherLanguage, foreignLanguage, category)) {
+            Log.d("INSERT", "New card created: " + motherLanguage + " -> " + foreignLanguage + " : " + category);
         } else {
             Log.d("INSERT", "Card with this word in mother language already exists!");
         }

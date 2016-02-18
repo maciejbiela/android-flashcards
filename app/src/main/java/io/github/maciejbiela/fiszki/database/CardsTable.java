@@ -16,7 +16,8 @@ public class CardsTable {
             "(" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_FROM_LANGUAGE + " TEXT NOT NULL UNIQUE, " +
-            COLUMN_TO_LANGUAGE + " TEXT NOT NULL" +
+            COLUMN_TO_LANGUAGE + " TEXT NOT NULL, " +
+            COLUMN_CATEGORY + " TEXT NOT NULL" +
             ");";
 
     private static final String DATABASE_DROP = "DROP TABLE IF EXISTS " + TABLE_CARDS + ";";

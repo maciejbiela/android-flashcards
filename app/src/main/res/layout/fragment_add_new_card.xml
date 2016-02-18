@@ -6,21 +6,27 @@
     tools:context="io.github.maciejbiela.fiszki.AddNewCardFragment">
 
     <EditText
-        android:id="@+id/from_language"
+        android:id="@+id/et_mother_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Polski" />
+        android:hint="English" />
 
     <EditText
-        android:id="@+id/to_language"
+        android:id="@+id/et_foreign_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Angielski" />
+        android:hint="Polish" />
+
+    <Spinner
+        android:id="@+id/sp_category"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/categories" />
 
     <Button
-        android:id="@+id/save_card"
+        android:id="@+id/bt_save_card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Zapisz fiszkę!" />
+        android:hint="Save card!" />
 
 </LinearLayout>
