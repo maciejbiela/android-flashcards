@@ -2,6 +2,9 @@ package io.github.maciejbiela.fiszki;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 
@@ -10,14 +13,14 @@ import io.github.maciejbiela.fiszki.provider.CardsProvider;
 
 public class Card {
 
-    public static Cursor getAll(ContentResolver contentResolver) {
-        return contentResolver.query(CardsProvider.CONTENT_URI, null, null, null, null);
-    }
-
-    public static Cursor getAllForCategory(ContentResolver contentResolver, String category) {
-        String selection = CardsTable.COLUMN_CATEGORY + " = ?";
-        String[] selectionArgs = {category.toUpperCase()};
-        return contentResolver.query(CardsProvider.CONTENT_URI, null, selection, selectionArgs, null);
+    public static Loader<Cursor> getAllForCategory(Context context, String category) {
+        String selection = null;
+        String[] selectionArgs = null;
+        if (!"all".equals(category)) {
+            selection = CardsTable.COLUMN_CATEGORY + " = ?";
+            selectionArgs = new String[]{category.toUpperCase()};
+        }
+        return new CursorLoader(context, CardsProvider.CONTENT_URI, null, selection, selectionArgs, null);
     }
 
     public static boolean add(ContentResolver contentResolver,
