@@ -62,7 +62,7 @@ public class CardsProvider extends ContentProvider {
             return null;
         }
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        long id = db.insert(TABLE_CARDS, null, values);
+        long id = db.insertOrThrow(TABLE_CARDS, null, values);
         return Uri.parse(PATH + "/" + id);
     }
 

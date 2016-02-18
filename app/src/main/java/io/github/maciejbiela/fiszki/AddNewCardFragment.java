@@ -2,6 +2,7 @@ package io.github.maciejbiela.fiszki;
 
 
 import android.app.Fragment;
+import android.content.ContentResolver;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,6 +47,15 @@ public class AddNewCardFragment extends Fragment
 
     @Override
     public void onClick(View v) {
-        Log.d("TEST", "I'm being clicked");
+        String inMotherLanguage = fromLanguage.getText().toString();
+        String inForeignLanguage = toLanguage.getText().toString();
+
+        ContentResolver contentResolver = getContext().getContentResolver();
+
+        if (Card.add(contentResolver, inMotherLanguage, inForeignLanguage)) {
+            Log.d("INSERT", "New card created: " + inMotherLanguage + " -> " + inForeignLanguage);
+        } else {
+            Log.d("INSERT", "Card with this word in mother language already exists!");
+        }
     }
 }
