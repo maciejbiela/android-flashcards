@@ -21,6 +21,7 @@ public class CardsProvider extends ContentProvider {
     private static final String AUTHORITY = "io.github.maciejbiela.fiszki.provider";
     private static final String PATH = "cards";
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + PATH);
+    public static final String LIMIT_QUERY_PARAMETER = "LIMIT";
 
     private static final int CARDS = 10;
     private static final int CARD_ID = 20;
@@ -45,8 +46,9 @@ public class CardsProvider extends ContentProvider {
         if (TextUtils.isEmpty(sortOrder)) {
             sortOrder = "_ID ASC";
         }
+        String limit = uri.getQueryParameter(LIMIT_QUERY_PARAMETER);
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder);
+        return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder, limit);
     }
 
     @Nullable
