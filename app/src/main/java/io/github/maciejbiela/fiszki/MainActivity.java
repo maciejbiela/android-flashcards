@@ -87,7 +87,9 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_gallery:
                 fragment = new AddNewCardFragment();
                 break;
-
+            case R.id.nav_slideshow:
+                fragment = new GuessFragment();
+                break;
         }
 
         if (fragment != null) {
