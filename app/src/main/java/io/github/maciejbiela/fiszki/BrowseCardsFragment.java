@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -38,7 +37,7 @@ public class BrowseCardsFragment extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_browse_cards, container, false);
         ButterKnife.bind(this, view);
-        populateCategorySpinner();
+        Category.populateSpinner(getContext(), spCategory);
         spCategory.setOnItemSelectedListener(this);
         adapter = new CardSimpleCursorAdapter(getContext());
         lvCards.setAdapter(adapter);
@@ -70,15 +69,5 @@ public class BrowseCardsFragment extends Fragment
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
-    }
-
-    private void populateCategorySpinner() {
-        String[] categories = getResources().getStringArray(R.array.categories);
-        String[] categoriesWithAll = new String[categories.length + 1];
-        categoriesWithAll[0] = "all";
-        System.arraycopy(categories, 0, categoriesWithAll, 1, categories.length);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, categoriesWithAll);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spCategory.setAdapter(adapter);
     }
 }
