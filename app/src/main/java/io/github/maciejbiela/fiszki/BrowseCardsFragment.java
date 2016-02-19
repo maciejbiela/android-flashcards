@@ -33,6 +33,12 @@ public class BrowseCardsFragment extends Fragment
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getLoaderManager().initLoader(0, null, this);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_browse_cards, container, false);
@@ -41,7 +47,6 @@ public class BrowseCardsFragment extends Fragment
         spCategory.setOnItemSelectedListener(this);
         adapter = new CardSimpleCursorAdapter(getContext());
         lvCards.setAdapter(adapter);
-        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
