@@ -1,6 +1,5 @@
 package io.github.maciejbiela.fiszki;
 
-
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
@@ -33,11 +32,13 @@ public class BrowseCardsFragment extends Fragment
     SimpleCursorAdapter adapter;
 
     public BrowseCardsFragment() {
+
         // Required empty public constructor
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
     }
@@ -45,18 +46,17 @@ public class BrowseCardsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_browse_cards, container, false);
         ButterKnife.bind(this, view);
-        CategoryHelper.populateSpinner(getContext(), spCategory);
-        spCategory.setOnItemSelectedListener(this);
-        adapter = new CardSimpleCursorAdapter(getContext());
-        lvCards.setAdapter(adapter);
-        lvCards.setOnItemClickListener(cardSelectedHandler);
+        setUpCategorySpinner();
+        setUpCardsListView();
         return view;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
         getLoaderManager().restartLoader(0, null, this);
     }
 
@@ -67,23 +67,39 @@ public class BrowseCardsFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         String category = spCategory.getSelectedItem().toString();
         return CardHelper.getAllForCategory(getContext(), category);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         adapter.swapCursor(data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
         adapter.swapCursor(null);
     }
 
+    private void setUpCategorySpinner() {
+        CategoryHelper.populateSpinner(getContext(), spCategory);
+        spCategory.setOnItemSelectedListener(this);
+    }
+
+    private void setUpCardsListView() {
+        adapter = new CardSimpleCursorAdapter(getContext());
+        lvCards.setAdapter(adapter);
+        lvCards.setOnItemClickListener(cardSelectedHandler);
+    }
+
     private OnItemClickListener cardSelectedHandler = new OnItemClickListener() {
+
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
             EditCardFragment fragment = new EditCardFragment();
             fragment.setId(id);
             getFragmentManager().beginTransaction()
