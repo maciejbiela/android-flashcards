@@ -5,6 +5,7 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -64,6 +65,8 @@ public class GuessFragment extends Fragment
         Category.populateSpinner(getContext(), spCategory);
         spCategory.setOnItemSelectedListener(this);
         btFindOut.setOnClickListener(findOutHandler);
+        btKnew.setOnClickListener(knewHandler);
+        btDidNotKnow.setOnClickListener(didNotKnowHandler);
         return view;
     }
 
@@ -101,11 +104,25 @@ public class GuessFragment extends Fragment
         setAnswerButtonsVisibility(INVISIBLE);
     }
 
-    OnClickListener findOutHandler = new OnClickListener() {
+    private OnClickListener findOutHandler = new OnClickListener() {
         @Override
         public void onClick(View v) {
             tvForeignLanguage.setText(foreignLanguage);
             setAnswerButtonsVisibility(VISIBLE);
+        }
+    };
+
+    private OnClickListener knewHandler = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d("ANSWER", "Knew");
+        }
+    };
+
+    private OnClickListener didNotKnowHandler = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Log.d("ANSWER", "Did not know");
         }
     };
 
