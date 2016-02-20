@@ -17,6 +17,7 @@ import android.widget.Spinner;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.github.maciejbiela.fiszki.adapter.CardSimpleCursorAdapter;
 import io.github.maciejbiela.fiszki.utils.CardHelper;
 import io.github.maciejbiela.fiszki.utils.CategoryHelper;
 
