@@ -40,4 +40,9 @@
         android:text="Didn't know!"
         android:visibility="invisible" />
 
+    <TextView
+        android:id="@+id/tv_statistics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

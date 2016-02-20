@@ -10,6 +10,8 @@ public class CardsTable {
     public static final String COLUMN_MOTHER_LANGUAGE = "MOTHER_LANGUAGE";
     public static final String COLUMN_FOREIGN_LANGUAGE = "FOREIGN_LANGUAGE";
     public static final String COLUMN_CATEGORY = "CATEGORY";
+    public static final String COLUMN_GOOD_ANSWERS = "GOOD_ANSWERS";
+    public static final String COLUMN_TOTAL_ANSWERS = "TOTAL_ANSWERS";
 
     private static final String DATABASE_CREATE = "CREATE TABLE " +
             TABLE_CARDS +
@@ -17,7 +19,9 @@ public class CardsTable {
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_MOTHER_LANGUAGE + " TEXT NOT NULL UNIQUE, " +
             COLUMN_FOREIGN_LANGUAGE + " TEXT NOT NULL, " +
-            COLUMN_CATEGORY + " TEXT NOT NULL" +
+            COLUMN_CATEGORY + " TEXT NOT NULL, " +
+            COLUMN_GOOD_ANSWERS + " INTEGER DEFAULT 0, " +
+            COLUMN_TOTAL_ANSWERS + " INTEGER DEFAULT 0" +
             ");";
 
     private static final String DATABASE_DROP = "DROP TABLE IF EXISTS " + TABLE_CARDS + ";";

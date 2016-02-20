@@ -2,10 +2,11 @@ package io.github.maciejbiela.fiszki;
 
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.ContentValues;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.github.maciejbiela.fiszki.database.CardsTable;
+import io.github.maciejbiela.fiszki.provider.CardsProvider;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -44,7 +46,14 @@ public class GuessFragment extends Fragment
     @Bind(R.id.bt_did_not_know)
     Button btDidNotKnow;
 
+    @Bind(R.id.tv_statistics)
+    TextView tvStatistics;
+
     private static final String EMPTY_STRING = "";
+    private long id;
+    private int goodAnswers;
+    private int totalAnswers;
+    private String motherLanguage;
     private String foreignLanguage;
 
     public GuessFragment() {
@@ -89,11 +98,12 @@ public class GuessFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if (data.moveToNext()) {
-            String motherLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_MOTHER_LANGUAGE));
-            foreignLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_FOREIGN_LANGUAGE));
+            extractCard(data);
             tvMotherLanguage.setText(motherLanguage);
             tvForeignLanguage.setText(EMPTY_STRING);
+            btFindOut.setEnabled(true);
             setAnswerButtonsVisibility(INVISIBLE);
+            hideStatistics();
         }
     }
 
@@ -109,27 +119,73 @@ public class GuessFragment extends Fragment
         public void onClick(View v) {
             tvForeignLanguage.setText(foreignLanguage);
             setAnswerButtonsVisibility(VISIBLE);
+            setAnswerButtonsEnabled(true);
         }
     };
 
     private OnClickListener knewHandler = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d("ANSWER", "Knew");
+            updateCardStatistics(true);
+            displayStatistics();
+            disableNextAnswerForTheSameCard();
         }
     };
 
     private OnClickListener didNotKnowHandler = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Log.d("ANSWER", "Did not know");
+            updateCardStatistics(false);
+            displayStatistics();
+            disableNextAnswerForTheSameCard();
         }
     };
+
+    private void updateCardStatistics(boolean goodAnswer) {
+        totalAnswers++;
+        if (goodAnswer) {
+            goodAnswers++;
+        }
+        Uri uri = Uri.withAppendedPath(CardsProvider.CONTENT_URI, String.valueOf(id));
+        ContentValues values = new ContentValues();
+        values.put(CardsTable.COLUMN_GOOD_ANSWERS, goodAnswers);
+        values.put(CardsTable.COLUMN_TOTAL_ANSWERS, totalAnswers);
+        getContext().getContentResolver().update(uri, values, null, null);
+    }
+
+    private void displayStatistics() {
+        String statistics = "Your statistics for this card: "
+                + goodAnswers + "/" + totalAnswers +
+                " (good/total)";
+        tvStatistics.setText(statistics);
+    }
+
+    private void hideStatistics() {
+        tvStatistics.setText(EMPTY_STRING);
+    }
+
+    private void disableNextAnswerForTheSameCard() {
+        btFindOut.setEnabled(false);
+        setAnswerButtonsEnabled(false);
+    }
 
     private void setAnswerButtonsVisibility(int visibility) {
         if (visibility == VISIBLE || visibility == INVISIBLE) {
             btKnew.setVisibility(visibility);
             btDidNotKnow.setVisibility(visibility);
         }
+    }
+
+    private void setAnswerButtonsEnabled(boolean enabled) {
+        btKnew.setEnabled(enabled);
+        btDidNotKnow.setEnabled(enabled);
+    }
+
+    private void extractCard(Cursor data) {
+        id = data.getLong(data.getColumnIndex(CardsTable.COLUMN_ID));
+        motherLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_MOTHER_LANGUAGE));
+        foreignLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_FOREIGN_LANGUAGE));
+        goodAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_GOOD_ANSWERS));
+        totalAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_TOTAL_ANSWERS));
     }
 }

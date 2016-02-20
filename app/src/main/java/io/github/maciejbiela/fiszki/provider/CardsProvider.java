@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import io.github.maciejbiela.fiszki.database.CardsDatabaseHelper;
+import io.github.maciejbiela.fiszki.database.CardsTable;
 
 import static io.github.maciejbiela.fiszki.database.CardsTable.TABLE_CARDS;
 
@@ -40,15 +41,22 @@ public class CardsProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
-        if (isUnknownURI(uri)) {
-            return null;
-        }
-        if (TextUtils.isEmpty(sortOrder)) {
-            sortOrder = "_ID ASC";
-        }
-        String limit = uri.getQueryParameter(LIMIT_QUERY_PARAMETER);
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
-        return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder, limit);
+        switch (MATCHER.match(uri)) {
+            case CARDS:
+                if (TextUtils.isEmpty(sortOrder)) {
+                    sortOrder = "_ID ASC";
+                }
+                String limit = uri.getQueryParameter(LIMIT_QUERY_PARAMETER);
+                return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder, limit);
+            case CARD_ID:
+                String id = uri.getLastPathSegment();
+                selection = CardsTable.COLUMN_ID + " = ?";
+                selectionArgs = new String[]{id};
+                return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder);
+            default:
+                return null;
+        }
     }
 
     @Nullable
@@ -75,7 +83,14 @@ public class CardsProvider extends ContentProvider {
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        if (MATCHER.match(uri) != CARD_ID) {
+            return 0;
+        }
+        String id = uri.getLastPathSegment();
+        selection = CardsTable.COLUMN_ID + " = ?";
+        selectionArgs = new String[]{id};
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        return db.update(TABLE_CARDS, values, selection, selectionArgs);
     }
 
     private boolean isUnknownURI(Uri uri) {
