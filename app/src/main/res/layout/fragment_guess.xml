@@ -11,7 +11,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:id="@+id/tv_foreign_language"
+        android:id="@+id/tv_mother_language"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -20,5 +20,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Find out!" />
+
+    <TextView
+        android:id="@+id/tv_foreign_language"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/bt_knew"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Knew!"
+        android:visibility="invisible" />
+
+    <Button
+        android:id="@+id/bt_did_not_know"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Didn't know!"
+        android:visibility="invisible" />
 
 </LinearLayout>
