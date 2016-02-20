@@ -58,11 +58,13 @@ public class GuessFragment extends Fragment
     private String foreignLanguage;
 
     public GuessFragment() {
+
         // Required empty public constructor
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
+
         super.onActivityCreated(savedInstanceState);
         getLoaderManager().initLoader(0, null, this);
     }
@@ -70,18 +72,17 @@ public class GuessFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_guess, container, false);
         ButterKnife.bind(this, view);
-        CategoryHelper.populateSpinner(getContext(), spCategory);
-        spCategory.setOnItemSelectedListener(this);
-        btFindOut.setOnClickListener(findOutHandler);
-        btKnew.setOnClickListener(knewHandler);
-        btDidNotKnow.setOnClickListener(didNotKnowHandler);
+        setUpCategorySpinner();
+        setOnClickListeners();
         return view;
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
         getLoaderManager().restartLoader(0, null, this);
     }
 
@@ -92,59 +93,102 @@ public class GuessFragment extends Fragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
         String category = spCategory.getSelectedItem().toString();
         return CardHelper.getRandomForCategory(getContext(), category);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
         if (data.moveToNext()) {
+
             extractCard(data);
-            tvMotherLanguage.setText(motherLanguage);
-            tvForeignLanguage.setText(EMPTY_STRING);
-            btFindOut.setEnabled(true);
-            setAnswerButtonsVisibility(INVISIBLE);
-            hideStatistics();
+            presentWord();
         }
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
+
+        clearFields();
+    }
+
+    private void setUpCategorySpinner() {
+
+        CategoryHelper.populateSpinner(getContext(), spCategory);
+        spCategory.setOnItemSelectedListener(this);
+    }
+
+    private void setOnClickListeners() {
+
+        btFindOut.setOnClickListener(findOutHandler);
+        btKnew.setOnClickListener(knewHandler);
+        btDidNotKnow.setOnClickListener(didNotKnowHandler);
+    }
+
+    private OnClickListener findOutHandler = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            presentAnswer();
+        }
+    };
+
+    private OnClickListener knewHandler = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            answerWasSuccessful(true);
+        }
+    };
+
+    private OnClickListener didNotKnowHandler = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            answerWasSuccessful(false);
+        }
+    };
+
+    private void clearFields() {
+
         tvMotherLanguage.setText(EMPTY_STRING);
         tvForeignLanguage.setText(EMPTY_STRING);
         setAnswerButtonsVisibility(INVISIBLE);
     }
 
-    private OnClickListener findOutHandler = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            tvForeignLanguage.setText(foreignLanguage);
-            setAnswerButtonsVisibility(VISIBLE);
-            setAnswerButtonsEnabled(true);
-        }
-    };
+    private void presentAnswer() {
 
-    private OnClickListener knewHandler = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            updateCardStatistics(true);
-            displayStatistics();
-            disableNextAnswerForTheSameCard();
-        }
-    };
+        tvForeignLanguage.setText(foreignLanguage);
+        setAnswerButtonsVisibility(VISIBLE);
+        setAnswerButtonsEnabled(true);
+    }
 
-    private OnClickListener didNotKnowHandler = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            updateCardStatistics(false);
-            displayStatistics();
-            disableNextAnswerForTheSameCard();
-        }
-    };
+    private void presentWord() {
+
+        tvMotherLanguage.setText(motherLanguage);
+        tvForeignLanguage.setText(EMPTY_STRING);
+        btFindOut.setEnabled(true);
+        setAnswerButtonsVisibility(INVISIBLE);
+        hideStatistics();
+    }
+
+    private void answerWasSuccessful(boolean successful) {
+
+        updateCardStatistics(successful);
+        displayStatistics();
+        disableNextAnswerForTheSameCard();
+    }
 
     private void updateCardStatistics(boolean goodAnswer) {
+
         totalAnswers++;
         if (goodAnswer) {
+
             goodAnswers++;
         }
         ContentValues values = new ContentValues();
@@ -154,32 +198,39 @@ public class GuessFragment extends Fragment
     }
 
     private void displayStatistics() {
+
         String statistics = StatisticsHelper.getText(goodAnswers, totalAnswers);
         tvStatistics.setText(statistics);
     }
 
     private void hideStatistics() {
+
         tvStatistics.setText(EMPTY_STRING);
     }
 
     private void disableNextAnswerForTheSameCard() {
+
         btFindOut.setEnabled(false);
         setAnswerButtonsEnabled(false);
     }
 
     private void setAnswerButtonsVisibility(int visibility) {
+
         if (visibility == VISIBLE || visibility == INVISIBLE) {
+
             btKnew.setVisibility(visibility);
             btDidNotKnow.setVisibility(visibility);
         }
     }
 
     private void setAnswerButtonsEnabled(boolean enabled) {
+
         btKnew.setEnabled(enabled);
         btDidNotKnow.setEnabled(enabled);
     }
 
     private void extractCard(Cursor data) {
+
         id = data.getLong(data.getColumnIndex(CardsTable.COLUMN_ID));
         motherLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_MOTHER_LANGUAGE));
         foreignLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_FOREIGN_LANGUAGE));
