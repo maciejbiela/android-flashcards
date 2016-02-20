@@ -102,7 +102,7 @@ public class BrowseCardsFragment extends Fragment
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
             EditCardFragment fragment = new EditCardFragment();
-            fragment.setId(id);
+            fragment.setCardId(id);
             getFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit();
