@@ -1,8 +1,9 @@
-package io.github.maciejbiela.fiszki;
+package io.github.maciejbiela.fiszki.utils;
 
-public class Statistics {
+public class StatisticsHelper {
 
     public static String getText(int goodAnswers, int totalAnswers) {
+
         return "Your statistics for this card: "
                 + goodAnswers + "/" + totalAnswers +
                 " (good/total)";

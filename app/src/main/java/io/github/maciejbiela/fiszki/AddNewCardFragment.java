@@ -15,6 +15,8 @@ import android.widget.Spinner;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.github.maciejbiela.fiszki.utils.AlertHelper;
+import io.github.maciejbiela.fiszki.utils.CardHelper;
 
 public class AddNewCardFragment extends Fragment {
 
@@ -95,7 +97,7 @@ public class AddNewCardFragment extends Fragment {
     private void add(NewCard newCard) {
 
         ContentResolver contentResolver = getContext().getContentResolver();
-        if (Card.add(contentResolver, newCard.motherLanguage, newCard.foreignLanguage, newCard.category)) {
+        if (CardHelper.add(contentResolver, newCard.motherLanguage, newCard.foreignLanguage, newCard.category)) {
 
             Log.d("INSERT", "New card created: " + newCard.motherLanguage + " -> " + newCard.foreignLanguage + " : " + newCard.category);
         } else {

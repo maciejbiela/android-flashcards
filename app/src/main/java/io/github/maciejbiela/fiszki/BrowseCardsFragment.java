@@ -6,7 +6,6 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import android.widget.Spinner;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.github.maciejbiela.fiszki.utils.CardHelper;
+import io.github.maciejbiela.fiszki.utils.CategoryHelper;
 
 public class BrowseCardsFragment extends Fragment
         implements OnItemSelectedListener, LoaderCallbacks<Cursor> {
@@ -46,7 +47,7 @@ public class BrowseCardsFragment extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_browse_cards, container, false);
         ButterKnife.bind(this, view);
-        Category.populateSpinner(getContext(), spCategory);
+        CategoryHelper.populateSpinner(getContext(), spCategory);
         spCategory.setOnItemSelectedListener(this);
         adapter = new CardSimpleCursorAdapter(getContext());
         lvCards.setAdapter(adapter);
@@ -67,7 +68,7 @@ public class BrowseCardsFragment extends Fragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String category = spCategory.getSelectedItem().toString();
-        return Card.getAllForCategory(getContext(), category);
+        return CardHelper.getAllForCategory(getContext(), category);
     }
 
     @Override

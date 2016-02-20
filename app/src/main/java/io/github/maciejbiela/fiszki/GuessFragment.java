@@ -5,7 +5,6 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
 import android.content.Loader;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +19,9 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.github.maciejbiela.fiszki.database.CardsTable;
-import io.github.maciejbiela.fiszki.provider.CardsProvider;
+import io.github.maciejbiela.fiszki.utils.CardHelper;
+import io.github.maciejbiela.fiszki.utils.CategoryHelper;
+import io.github.maciejbiela.fiszki.utils.StatisticsHelper;
 
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
@@ -71,7 +72,7 @@ public class GuessFragment extends Fragment
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_guess, container, false);
         ButterKnife.bind(this, view);
-        Category.populateSpinner(getContext(), spCategory);
+        CategoryHelper.populateSpinner(getContext(), spCategory);
         spCategory.setOnItemSelectedListener(this);
         btFindOut.setOnClickListener(findOutHandler);
         btKnew.setOnClickListener(knewHandler);
@@ -92,7 +93,7 @@ public class GuessFragment extends Fragment
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String category = spCategory.getSelectedItem().toString();
-        return Card.getRandomForCategory(getContext(), category);
+        return CardHelper.getRandomForCategory(getContext(), category);
     }
 
     @Override
@@ -149,11 +150,11 @@ public class GuessFragment extends Fragment
         ContentValues values = new ContentValues();
         values.put(CardsTable.COLUMN_GOOD_ANSWERS, goodAnswers);
         values.put(CardsTable.COLUMN_TOTAL_ANSWERS, totalAnswers);
-        Card.update(getContext().getContentResolver(), id, values);
+        CardHelper.update(getContext().getContentResolver(), id, values);
     }
 
     private void displayStatistics() {
-        String statistics = Statistics.getText(goodAnswers, totalAnswers);
+        String statistics = StatisticsHelper.getText(goodAnswers, totalAnswers);
         tvStatistics.setText(statistics);
     }
 

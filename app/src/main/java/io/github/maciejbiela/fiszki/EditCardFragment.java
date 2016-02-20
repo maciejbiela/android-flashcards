@@ -21,6 +21,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.github.maciejbiela.fiszki.database.CardsTable;
 import io.github.maciejbiela.fiszki.provider.CardsProvider;
+import io.github.maciejbiela.fiszki.utils.CardHelper;
+import io.github.maciejbiela.fiszki.utils.StatisticsHelper;
 
 public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor>, OnClickListener {
 
@@ -67,7 +69,7 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return Card.getCardWithID(getContext(), this.id);
+        return CardHelper.getCardWithID(getContext(), this.id);
     }
 
     @Override
@@ -78,7 +80,7 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
             String category = data.getString(data.getColumnIndex(CardsTable.COLUMN_CATEGORY));
             int goodAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_GOOD_ANSWERS));
             int totalAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_TOTAL_ANSWERS));
-            String statistics = Statistics.getText(goodAnswers, totalAnswers);
+            String statistics = StatisticsHelper.getText(goodAnswers, totalAnswers);
             tvStatistics.setText(statistics);
             etMotherLanguage.setText(motherLanguage);
             etForeignLanguage.setText(foreignLanguage);
@@ -107,7 +109,7 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
         values.put(CardsTable.COLUMN_GOOD_ANSWERS, 0);
         values.put(CardsTable.COLUMN_TOTAL_ANSWERS, 0);
 
-        if (Card.update(getContext().getContentResolver(), id, values)) {
+        if (CardHelper.update(getContext().getContentResolver(), id, values)) {
             BrowseCardsFragment fragment = new BrowseCardsFragment();
 
             getFragmentManager().beginTransaction()
