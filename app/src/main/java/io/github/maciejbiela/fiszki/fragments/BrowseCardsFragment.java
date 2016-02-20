@@ -1,4 +1,4 @@
-package io.github.maciejbiela.fiszki;
+package io.github.maciejbiela.fiszki.fragments;
 
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -17,6 +17,7 @@ import android.widget.Spinner;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import io.github.maciejbiela.fiszki.R;
 import io.github.maciejbiela.fiszki.adapter.CardSimpleCursorAdapter;
 import io.github.maciejbiela.fiszki.utils.CardHelper;
 import io.github.maciejbiela.fiszki.utils.CategoryHelper;

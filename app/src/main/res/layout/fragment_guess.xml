@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="io.github.maciejbiela.fiszki.GuessFragment">
+    tools:context=".fragments.GuessFragment">
 
     <Spinner
         android:id="@id/sp_category"

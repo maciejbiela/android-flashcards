@@ -11,6 +11,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import io.github.maciejbiela.fiszki.fragments.AddNewCardFragment;
+import io.github.maciejbiela.fiszki.fragments.BrowseCardsFragment;
+import io.github.maciejbiela.fiszki.fragments.GuessFragment;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
