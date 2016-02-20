@@ -2,14 +2,17 @@ package io.github.maciejbiela.fiszki;
 
 
 import android.app.Fragment;
-import android.app.LoaderManager;
+import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -18,7 +21,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class BrowseCardsFragment extends Fragment
-        implements AdapterView.OnItemSelectedListener, LoaderManager.LoaderCallbacks<Cursor> {
+        implements OnItemSelectedListener, LoaderCallbacks<Cursor> {
 
     @Bind(R.id.sp_category)
     Spinner spCategory;
@@ -47,6 +50,7 @@ public class BrowseCardsFragment extends Fragment
         spCategory.setOnItemSelectedListener(this);
         adapter = new CardSimpleCursorAdapter(getContext());
         lvCards.setAdapter(adapter);
+        lvCards.setOnItemClickListener(cardSelectedHandler);
         return view;
     }
 
@@ -75,4 +79,15 @@ public class BrowseCardsFragment extends Fragment
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }
+
+    private OnItemClickListener cardSelectedHandler = new OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            EditCardFragment fragment = new EditCardFragment();
+            fragment.setId(id);
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.content_frame, fragment)
+                    .commit();
+        }
+    };
 }

@@ -146,17 +146,14 @@ public class GuessFragment extends Fragment
         if (goodAnswer) {
             goodAnswers++;
         }
-        Uri uri = Uri.withAppendedPath(CardsProvider.CONTENT_URI, String.valueOf(id));
         ContentValues values = new ContentValues();
         values.put(CardsTable.COLUMN_GOOD_ANSWERS, goodAnswers);
         values.put(CardsTable.COLUMN_TOTAL_ANSWERS, totalAnswers);
-        getContext().getContentResolver().update(uri, values, null, null);
+        Card.update(getContext().getContentResolver(), id, values);
     }
 
     private void displayStatistics() {
-        String statistics = "Your statistics for this card: "
-                + goodAnswers + "/" + totalAnswers +
-                " (good/total)";
+        String statistics = Statistics.getText(goodAnswers, totalAnswers);
         tvStatistics.setText(statistics);
     }
 
