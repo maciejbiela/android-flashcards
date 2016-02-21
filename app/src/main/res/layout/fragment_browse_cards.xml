@@ -6,6 +6,12 @@
     android:orientation="vertical"
     tools:context=".fragments.BrowseCardsFragment">
 
+    <Button
+        android:id="@+id/bt_clear_cards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear all cards"/>
+
     <Spinner
         android:id="@id/sp_category"
         android:layout_width="match_parent"

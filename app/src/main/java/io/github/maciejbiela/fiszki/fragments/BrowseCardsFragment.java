@@ -7,10 +7,12 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
@@ -23,13 +25,16 @@ import io.github.maciejbiela.fiszki.utils.CardHelper;
 import io.github.maciejbiela.fiszki.utils.CategoryHelper;
 
 public class BrowseCardsFragment extends Fragment
-        implements OnItemSelectedListener, LoaderCallbacks<Cursor> {
+        implements OnItemSelectedListener, LoaderCallbacks<Cursor>, OnClickListener {
 
     @Bind(R.id.sp_category)
     Spinner spCategory;
 
     @Bind(R.id.lv_cards)
     ListView lvCards;
+
+    @Bind(R.id.bt_clear_cards)
+    Button btClearCards;
 
     SimpleCursorAdapter adapter;
 
@@ -51,6 +56,7 @@ public class BrowseCardsFragment extends Fragment
 
         View view = inflater.inflate(R.layout.fragment_browse_cards, container, false);
         ButterKnife.bind(this, view);
+        setUpOnClickListeners();
         setUpCategorySpinner();
         setUpCardsListView();
         return view;
@@ -86,12 +92,26 @@ public class BrowseCardsFragment extends Fragment
         adapter.swapCursor(null);
     }
 
+    @Override
+    public void onClick(View v) {
+
+        CardHelper.deleteAll(getContext().getContentResolver());
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    private void setUpOnClickListeners() {
+
+        btClearCards.setOnClickListener(this);
+    }
+
     private void setUpCategorySpinner() {
+
         CategoryHelper.populateSpinner(getContext(), spCategory);
         spCategory.setOnItemSelectedListener(this);
     }
 
     private void setUpCardsListView() {
+
         adapter = new CardSimpleCursorAdapter(getContext());
         lvCards.setAdapter(adapter);
         lvCards.setOnItemClickListener(cardSelectedHandler);

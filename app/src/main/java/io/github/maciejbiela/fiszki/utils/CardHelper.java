@@ -56,7 +56,16 @@ public class CardHelper {
 
         Set<String> columns = values.keySet();
         capitalizeValues(values, columns);
-        return isUpdateSuccesfull(contentResolver, values, cardUri(cardId));
+        return isUpdateSuccessful(contentResolver, values, cardUri(cardId));
+    }
+
+    public static boolean deleteAll(ContentResolver contentResolver) {
+
+        if (contentResolver.delete(CardsProvider.CONTENT_URI, null, null) != 0) {
+
+            return true;
+        }
+        return false;
     }
 
     private static Loader<Cursor> getAllForCategory(Context context,
@@ -97,7 +106,7 @@ public class CardHelper {
         return Uri.withAppendedPath(CardsProvider.CONTENT_URI, String.valueOf(cardId));
     }
 
-    private static boolean isUpdateSuccesfull(ContentResolver contentResolver, ContentValues values, Uri uri) {
+    private static boolean isUpdateSuccessful(ContentResolver contentResolver, ContentValues values, Uri uri) {
 
         return contentResolver.update(uri, values, null, null) != -1;
     }

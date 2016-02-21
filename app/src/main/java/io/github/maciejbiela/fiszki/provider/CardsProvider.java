@@ -28,12 +28,14 @@ public class CardsProvider extends ContentProvider {
     private static final int CARD_ID = 20;
 
     static {
+
         MATCHER.addURI(AUTHORITY, PATH, CARDS);
         MATCHER.addURI(AUTHORITY, PATH + "/#", CARD_ID);
     }
 
     @Override
     public boolean onCreate() {
+
         databaseHelper = new CardsDatabaseHelper(getContext());
         return true;
     }
@@ -41,19 +43,24 @@ public class CardsProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
         switch (MATCHER.match(uri)) {
+
             case CARDS:
                 if (TextUtils.isEmpty(sortOrder)) {
+
                     sortOrder = "_ID ASC";
                 }
                 String limit = uri.getQueryParameter(LIMIT_QUERY_PARAMETER);
                 return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder, limit);
+
             case CARD_ID:
                 String id = uri.getLastPathSegment();
                 selection = CardsTable.COLUMN_ID + " = ?";
                 selectionArgs = new String[]{id};
                 return db.query(TABLE_CARDS, projection, selection, selectionArgs, null, null, sortOrder);
+
             default:
                 return null;
         }
@@ -62,13 +69,16 @@ public class CardsProvider extends ContentProvider {
     @Nullable
     @Override
     public String getType(Uri uri) {
+
         return null;
     }
 
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+
         if (isUnknownURI(uri)) {
+
             return null;
         }
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
@@ -78,12 +88,20 @@ public class CardsProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+
+        if (isUnknownURI(uri)) {
+
+            return 0;
+        }
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+        return db.delete(TABLE_CARDS, null, null);
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
         if (MATCHER.match(uri) != CARD_ID) {
+
             return 0;
         }
         String id = uri.getLastPathSegment();
@@ -94,6 +112,7 @@ public class CardsProvider extends ContentProvider {
     }
 
     private boolean isUnknownURI(Uri uri) {
+
         return MATCHER.match(uri) != CARDS;
     }
 }
