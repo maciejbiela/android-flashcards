@@ -51,6 +51,9 @@ public class GuessFragment extends Fragment
     @Bind(R.id.tv_statistics)
     TextView tvStatistics;
 
+    @Bind(R.id.bt_next_card_from_category)
+    Button btNextCardFromCategory;
+
     private static final String EMPTY_STRING = "";
     private long id;
     private int goodAnswers;
@@ -84,7 +87,7 @@ public class GuessFragment extends Fragment
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        getLoaderManager().restartLoader(0, null, this);
+        restartLoader();
     }
 
     @Override
@@ -126,6 +129,7 @@ public class GuessFragment extends Fragment
         btFindOut.setOnClickListener(findOutHandler);
         btKnew.setOnClickListener(knewHandler);
         btDidNotKnow.setOnClickListener(didNotKnowHandler);
+        btNextCardFromCategory.setOnClickListener(nextCardHandler);
     }
 
     private OnClickListener findOutHandler = new OnClickListener() {
@@ -155,11 +159,21 @@ public class GuessFragment extends Fragment
         }
     };
 
+    private OnClickListener nextCardHandler = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            restartLoader();
+        }
+    };
+
     private void clearFields() {
 
         tvMotherLanguage.setText(EMPTY_STRING);
         tvForeignLanguage.setText(EMPTY_STRING);
         setAnswerButtonsVisibility(INVISIBLE);
+        btNextCardFromCategory.setVisibility(INVISIBLE);
     }
 
     private void presentAnswer() {
@@ -176,6 +190,7 @@ public class GuessFragment extends Fragment
         btFindOut.setEnabled(true);
         setAnswerButtonsVisibility(INVISIBLE);
         hideStatistics();
+        btNextCardFromCategory.setVisibility(INVISIBLE);
     }
 
     private void answerWasSuccessful(boolean successful) {
@@ -213,6 +228,7 @@ public class GuessFragment extends Fragment
 
         btFindOut.setEnabled(false);
         setAnswerButtonsEnabled(false);
+        btNextCardFromCategory.setVisibility(VISIBLE);
     }
 
     private void setAnswerButtonsVisibility(int visibility) {
@@ -237,5 +253,10 @@ public class GuessFragment extends Fragment
         foreignLanguage = data.getString(data.getColumnIndex(CardsTable.COLUMN_FOREIGN_LANGUAGE));
         goodAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_GOOD_ANSWERS));
         totalAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_TOTAL_ANSWERS));
+    }
+
+    private void restartLoader() {
+
+        getLoaderManager().restartLoader(0, null, this);
     }
 }
