@@ -3,6 +3,7 @@ package io.github.maciejbiela.fiszki.fragments;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -28,6 +29,9 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
 
     @Bind(R.id.tv_statistics)
     TextView tvStatistics;
+
+    @Bind(R.id.bt_clear_statistics)
+    Button btClearStatistics;
 
     @Bind(R.id.et_mother_language)
     EditText etMotherLanguage;
@@ -95,7 +99,9 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
     }
 
     private void setOnClickListeners() {
+
         btSaveCard.setOnClickListener(updateCardListener);
+        btClearStatistics.setOnClickListener(clearStatisticsListener);
     }
 
     private OnClickListener updateCardListener = new OnClickListener() {
@@ -111,6 +117,15 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
 
                 informThatAllFieldsNeedToBeFilled();
             }
+        }
+    };
+
+    private OnClickListener clearStatisticsListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            displayClearingStatisticsAlert();
         }
     };
 
@@ -217,6 +232,17 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
         displayAlert(alertTitle, alertMessage);
     }
 
+    private void displayClearingStatisticsAlert() {
+
+        String alertTitle = "Resetting card statistics!";
+        String alertMessage = "You are about to clear statistics for this card.\n" +
+                "Please note that you can not undo this operation.\n" +
+                "Press " + AlertHelper.CANCEL + " to keep your statistics for current card.\n" +
+                "Pressing " + AlertHelper.OK + " will clear statistics.";
+        AlertHelper.displayAlertOKCancel(getContext(), alertTitle, alertMessage,
+                createResetStatisticsHandler());
+    }
+
     private void displayAlert(String alertTitle, String alertMessage) {
 
         AlertHelper.displayAlertOK(getContext(), alertTitle, alertMessage);
@@ -233,5 +259,24 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
             }
         }
         return -1;
+    }
+
+    private DialogInterface.OnClickListener createResetStatisticsHandler() {
+
+        return new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                CardHelper.resetStatistics(getContext().getContentResolver(), cardId);
+                displayUpdatedStatistics();
+            }
+
+            private void displayUpdatedStatistics() {
+
+                String statistics = StatisticsHelper.getText(0, 0);
+                tvStatistics.setText(statistics);
+            }
+        };
     }
 }

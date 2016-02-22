@@ -6,8 +6,8 @@ import android.content.DialogInterface;
 
 public class AlertHelper {
 
-    private static final String OK = "OK";
-    private static final String CANCEL = "Cancel";
+    public static final String OK = "OK";
+    public static final String CANCEL = "Cancel";
 
     private static final DialogInterface.OnClickListener DISMISSER = new DialogInterface.OnClickListener() {
 

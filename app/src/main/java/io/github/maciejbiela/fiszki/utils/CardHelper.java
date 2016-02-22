@@ -68,6 +68,18 @@ public class CardHelper {
         return false;
     }
 
+    public static boolean resetStatistics(ContentResolver contentResolver, long cardId) {
+
+        ContentValues values = new ContentValues();
+        values.put(CardsTable.COLUMN_GOOD_ANSWERS, 0);
+        values.put(CardsTable.COLUMN_TOTAL_ANSWERS, 0);
+        if (contentResolver.update(cardUri(cardId), values, null, null) != 0) {
+
+            return true;
+        }
+        return false;
+    }
+
     private static Loader<Cursor> getAllForCategory(Context context,
                                                     String category,
                                                     String sortOrder,

@@ -9,6 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/bt_clear_statistics"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Clear statistics" />
+
     <EditText
         android:id="@id/et_mother_language"
         android:layout_width="match_parent"
