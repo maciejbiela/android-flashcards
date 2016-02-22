@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import io.github.maciejbiela.fiszki.database.CardsDatabaseHelper;
 import io.github.maciejbiela.fiszki.database.CardsTable;
 
+import static io.github.maciejbiela.fiszki.database.CardsTable.COLUMN_ID;
 import static io.github.maciejbiela.fiszki.database.CardsTable.TABLE_CARDS;
 
 public class CardsProvider extends ContentProvider {
@@ -77,7 +78,7 @@ public class CardsProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues values) {
 
-        if (isUnknownURI(uri)) {
+        if (!isCardsURI(uri)) {
 
             return null;
         }
@@ -93,14 +94,19 @@ public class CardsProvider extends ContentProvider {
 
             return 0;
         }
+        if (isCardIdURI(uri)) {
+            String cardId = uri.getLastPathSegment();
+            selection = COLUMN_ID + " = ?";
+            selectionArgs = new String[]{cardId};
+        }
         SQLiteDatabase db = databaseHelper.getWritableDatabase();
-        return db.delete(TABLE_CARDS, null, null);
+        return db.delete(TABLE_CARDS, selection, selectionArgs);
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
 
-        if (MATCHER.match(uri) != CARD_ID) {
+        if (!isCardIdURI(uri)) {
 
             return 0;
         }
@@ -111,8 +117,18 @@ public class CardsProvider extends ContentProvider {
         return db.update(TABLE_CARDS, values, selection, selectionArgs);
     }
 
+    private boolean isCardsURI(Uri uri) {
+
+        return MATCHER.match(uri) == CARDS;
+    }
+
+    private boolean isCardIdURI(Uri uri) {
+
+        return MATCHER.match(uri) == CARD_ID;
+    }
+
     private boolean isUnknownURI(Uri uri) {
 
-        return MATCHER.match(uri) != CARDS;
+        return !isCardsURI(uri) && !isCardIdURI(uri);
     }
 }

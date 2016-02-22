@@ -138,7 +138,7 @@ public class BrowseCardsFragment extends Fragment
         String message = "You are about to delete all your cards.\n" +
                 "Please note that this operation is irreversible.\n" +
                 "Press Cancel to keep your cards.\n" +
-                "Pressing OK will proceed with deleting cards.";
+                "Pressing OK will proceed with deleting all cards.";
         DialogInterface.OnClickListener deleteHandler = new DialogInterface.OnClickListener() {
 
             @Override

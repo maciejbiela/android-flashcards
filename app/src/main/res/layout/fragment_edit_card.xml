@@ -42,4 +42,15 @@
         android:layout_height="wrap_content"
         android:text="PLEASE NOTE: Pressing Update button will reset card statistics" />
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/bt_delete_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete card" />
+
 </LinearLayout>

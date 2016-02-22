@@ -59,13 +59,14 @@ public class CardHelper {
         return isUpdateSuccessful(contentResolver, values, cardUri(cardId));
     }
 
+    public static boolean delete(ContentResolver contentResolver, long id) {
+
+        return delete(contentResolver, cardUri(id));
+    }
+
     public static boolean deleteAll(ContentResolver contentResolver) {
 
-        if (contentResolver.delete(CardsProvider.CONTENT_URI, null, null) != 0) {
-
-            return true;
-        }
-        return false;
+        return delete(contentResolver, CardsProvider.CONTENT_URI);
     }
 
     public static boolean resetStatistics(ContentResolver contentResolver, long cardId) {
@@ -111,6 +112,15 @@ public class CardHelper {
             return false;
         }
         return true;
+    }
+
+    private static boolean delete(ContentResolver contentResolver, Uri uri) {
+
+        if (contentResolver.delete(uri, null, null) != 0) {
+
+            return true;
+        }
+        return false;
     }
 
     private static Uri cardUri(long cardId) {

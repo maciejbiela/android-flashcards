@@ -45,6 +45,9 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
     @Bind(R.id.bt_save_card)
     Button btSaveCard;
 
+    @Bind(R.id.bt_delete_card)
+    Button btDeleteCard;
+
     private static final String EMPTY_STRING = "";
 
     private long cardId;
@@ -102,6 +105,7 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
 
         btSaveCard.setOnClickListener(updateCardListener);
         btClearStatistics.setOnClickListener(clearStatisticsListener);
+        btDeleteCard.setOnClickListener(deleteCardListener);
     }
 
     private OnClickListener updateCardListener = new OnClickListener() {
@@ -126,6 +130,15 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
         public void onClick(View v) {
 
             displayClearingStatisticsAlert();
+        }
+    };
+
+    private OnClickListener deleteCardListener = new OnClickListener() {
+
+        @Override
+        public void onClick(View v) {
+
+            displayDeleteAlert();
         }
     };
 
@@ -225,6 +238,17 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
         AlertHelper.displayAlertOK(getContext(), alertTitle, alertMessage);
     }
 
+    private void displayDeleteAlert() {
+
+        String alertTitle = "Careful!";
+        String alertMessage = "You are about to delete this card.\n" +
+                "Please note that this operation is irreversible.\n" +
+                "Press " + AlertHelper.CANCEL + " to keep your card.\n" +
+                "Pressing " + AlertHelper.OK + " will proceed with deleting this card.";
+        AlertHelper.displayAlertOKCancel(getContext(), alertTitle, alertMessage,
+                createDeleteHandler());
+    }
+
     private void informThatAllFieldsNeedToBeFilled() {
 
         String alertTitle = "Missing value(s)!";
@@ -276,6 +300,19 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
 
                 String statistics = StatisticsHelper.getText(0, 0);
                 tvStatistics.setText(statistics);
+            }
+        };
+    }
+
+    private DialogInterface.OnClickListener createDeleteHandler() {
+
+        return new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                CardHelper.delete(getContext().getContentResolver(), cardId);
+                switchBackToPreviousFragment();
             }
         };
     }
