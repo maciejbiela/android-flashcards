@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -34,16 +35,20 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         if (savedInstanceState == null) {
+
             displayView(R.id.nav_browse_cards);
         }
     }
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
+
             drawer.closeDrawer(GravityCompat.START);
         } else {
+
             super.onBackPressed();
         }
     }
@@ -51,6 +56,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         displayView(id);
@@ -58,10 +64,12 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void displayView(int viewId) {
+
         Fragment fragment = null;
         String title = getString(R.string.app_name);
 
         switch (viewId) {
+
             case R.id.nav_browse_cards:
                 fragment = new BrowseCardsFragment();
                 break;
@@ -74,12 +82,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         if (fragment != null) {
+
             getFragmentManager().beginTransaction()
                     .replace(R.id.content_frame, fragment)
                     .commit();
         }
 
         if (getSupportActionBar() != null) {
+
             getSupportActionBar().setTitle(title);
         }
 

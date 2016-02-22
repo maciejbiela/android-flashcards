@@ -27,10 +27,12 @@ public class CardsTable {
     private static final String DATABASE_DROP = "DROP TABLE IF EXISTS " + TABLE_CARDS + ";";
 
     public static void onCreate(SQLiteDatabase db) {
+
         db.execSQL(DATABASE_CREATE);
     }
 
     public static void onUpgrade(SQLiteDatabase db) {
+
         db.execSQL(DATABASE_DROP);
         onCreate(db);
     }

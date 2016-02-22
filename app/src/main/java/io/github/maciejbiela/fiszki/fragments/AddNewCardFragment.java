@@ -50,6 +50,7 @@ public class AddNewCardFragment extends Fragment {
     }
 
     private void setOnClickListeners() {
+
         btSaveCard.setOnClickListener(saveCardHandler);
     }
 
@@ -57,10 +58,13 @@ public class AddNewCardFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
+
             NewCard newCard = readInputFields();
             if (fieldsNotEmpty(newCard)) {
+
                 add(newCard);
             } else {
+
                 informThatAllFieldsNeedToBeFilled();
             }
         }
