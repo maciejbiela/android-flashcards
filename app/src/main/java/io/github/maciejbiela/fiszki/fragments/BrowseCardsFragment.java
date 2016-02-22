@@ -2,6 +2,7 @@ package io.github.maciejbiela.fiszki.fragments;
 
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.DialogInterface;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import io.github.maciejbiela.fiszki.R;
 import io.github.maciejbiela.fiszki.adapter.CardSimpleCursorAdapter;
+import io.github.maciejbiela.fiszki.utils.AlertHelper;
 import io.github.maciejbiela.fiszki.utils.CardHelper;
 import io.github.maciejbiela.fiszki.utils.CategoryHelper;
 
@@ -95,8 +97,7 @@ public class BrowseCardsFragment extends Fragment
     @Override
     public void onClick(View v) {
 
-        CardHelper.deleteAll(getContext().getContentResolver());
-        getLoaderManager().restartLoader(0, null, this);
+        displayDeleteWarning();
     }
 
     private void setUpOnClickListeners() {
@@ -129,4 +130,24 @@ public class BrowseCardsFragment extends Fragment
                     .commit();
         }
     };
+
+    private void displayDeleteWarning() {
+
+        final BrowseCardsFragment currentFragment = this;
+        String title = "Careful!";
+        String message = "You are about to delete all your cards.\n" +
+                "Please note that this operation is irreversible.\n" +
+                "Press Cancel to keep your cards.\n" +
+                "Pressing OK will proceed with deleting cards.";
+        DialogInterface.OnClickListener deleteHandler = new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                CardHelper.deleteAll(getContext().getContentResolver());
+                getLoaderManager().restartLoader(0, null, currentFragment);
+            }
+        };
+        AlertHelper.displayAlertOKCancel(getContext(), title, message, deleteHandler);
+    }
 }

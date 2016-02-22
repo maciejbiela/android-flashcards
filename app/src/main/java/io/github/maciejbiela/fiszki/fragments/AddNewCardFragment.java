@@ -120,6 +120,6 @@ public class AddNewCardFragment extends Fragment {
 
     private void displayAlert(String alertTitle, String alertMessage) {
 
-        AlertHelper.displayAlert(getContext(), alertTitle, alertMessage);
+        AlertHelper.displayAlertOK(getContext(), alertTitle, alertMessage);
     }
 }

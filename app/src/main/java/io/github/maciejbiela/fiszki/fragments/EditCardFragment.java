@@ -204,22 +204,22 @@ public class EditCardFragment extends Fragment implements LoaderCallbacks<Cursor
 
     private void displayUpdatingAlert() {
 
-        String alertTitle = "Card updating error";
-        String alertMessage = "There was an error while updating your card. " +
-                "Please note that you can NOT have multiple cards for the same word in your mother language";
-        AlertHelper.displayAlert(getContext(), alertTitle, alertMessage);
+        String alertTitle = "Card updating error!";
+        String alertMessage = "There was an error while updating your card.\n" +
+                "Please note that you can NOT have multiple cards for the same word in your mother language.";
+        AlertHelper.displayAlertOK(getContext(), alertTitle, alertMessage);
     }
 
     private void informThatAllFieldsNeedToBeFilled() {
 
-        String alertTitle = "Missing value(s)";
-        String alertMessage = "Word and its translation must be non-empty. Category needs to be selected";
+        String alertTitle = "Missing value(s)!";
+        String alertMessage = "Word and its translation must be non-empty. Category needs to be selected.";
         displayAlert(alertTitle, alertMessage);
     }
 
     private void displayAlert(String alertTitle, String alertMessage) {
 
-        AlertHelper.displayAlert(getContext(), alertTitle, alertMessage);
+        AlertHelper.displayAlertOK(getContext(), alertTitle, alertMessage);
     }
 
     private int getSpinnerIndex(String category) {

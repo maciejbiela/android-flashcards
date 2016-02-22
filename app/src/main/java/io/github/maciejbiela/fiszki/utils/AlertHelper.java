@@ -6,19 +6,39 @@ import android.content.DialogInterface;
 
 public class AlertHelper {
 
-    public static void displayAlert(Context context, String alertTitle, String alertMessage) {
+    private static final String OK = "OK";
+    private static final String CANCEL = "Cancel";
+
+    private static final DialogInterface.OnClickListener DISMISSER = new DialogInterface.OnClickListener() {
+
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+
+            dialog.dismiss();
+        }
+    };
+
+    public static void displayAlertOK(Context context, String alertTitle, String alertMessage) {
+
+        displayAlertOK(context, alertTitle, alertMessage, DISMISSER);
+    }
+
+    public static void displayAlertOK(Context context, String alertTitle, String alertMessage, DialogInterface.OnClickListener okListener) {
 
         AlertDialog alertDialog = new AlertDialog.Builder(context).create();
         alertDialog.setTitle(alertTitle);
         alertDialog.setMessage(alertMessage);
-        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, OK, okListener);
+        alertDialog.show();
+    }
 
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+    public static void displayAlertOKCancel(Context context, String alertTitle, String alertMessage, DialogInterface.OnClickListener okListener) {
 
-                dialog.dismiss();
-            }
-        });
+        AlertDialog alertDialog = new AlertDialog.Builder(context).create();
+        alertDialog.setTitle(alertTitle);
+        alertDialog.setMessage(alertMessage);
+        alertDialog.setButton(DialogInterface.BUTTON_NEUTRAL, OK, okListener);
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, CANCEL, DISMISSER);
         alertDialog.show();
     }
 }
