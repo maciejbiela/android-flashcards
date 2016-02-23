@@ -109,6 +109,10 @@ public class GuessFragment extends Fragment
 
             extractCard(data);
             presentWord();
+        } else {
+
+            btFindOut.setEnabled(false);
+            clearFields();
         }
     }
 

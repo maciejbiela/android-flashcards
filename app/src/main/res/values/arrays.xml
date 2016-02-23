@@ -2,6 +2,12 @@
 <resources>
     <string-array name="categories">
         <item>ANIMALS</item>
+        <item>BODY PARTS</item>
+        <item>BUSINESS</item>
         <item>COLORS</item>
+        <item>HEALTH</item>
+        <item>SCHOOL</item>
+        <item>SPORTS</item>
+        <item>OTHER</item>
     </string-array>
 </resources>
