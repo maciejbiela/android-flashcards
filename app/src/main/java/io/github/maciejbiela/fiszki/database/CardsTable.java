@@ -29,11 +29,17 @@ public class CardsTable {
     public static void onCreate(SQLiteDatabase db) {
 
         db.execSQL(DATABASE_CREATE);
+        CardsTablePresentationDataFiller.fillWithData(db);
     }
 
     public static void onUpgrade(SQLiteDatabase db) {
 
         db.execSQL(DATABASE_DROP);
-        onCreate(db);
+        upgrade(db);
+    }
+
+    private static void upgrade(SQLiteDatabase db) {
+
+        db.execSQL(DATABASE_CREATE);
     }
 }
