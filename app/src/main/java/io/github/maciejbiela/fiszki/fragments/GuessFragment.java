@@ -32,7 +32,6 @@ public class GuessFragment extends Fragment
 
     @Bind(R.id.sp_category)
     Spinner spCategory;
-
     @Bind(R.id.tv_foreign_language)
     TextView tvForeignLanguage;
 
@@ -55,6 +54,12 @@ public class GuessFragment extends Fragment
     Button btNextCardFromCategory;
 
     private static final String EMPTY_STRING = "";
+    private static final String POSITION = "POSITION";
+
+    private boolean hasData;
+    private int previousPosition = 0;
+    private State state = State.UNDEFINED;
+
     private long id;
     private int goodAnswers;
     private int totalAnswers;
@@ -70,7 +75,14 @@ public class GuessFragment extends Fragment
     public void onActivityCreated(Bundle savedInstanceState) {
 
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(0, null, this);
+        initLoader();
+        if (savedInstanceState != null) {
+
+            read(savedInstanceState);
+        } else {
+
+            hasData = false;
+        }
     }
 
     @Override
@@ -85,9 +97,20 @@ public class GuessFragment extends Fragment
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+
+        save(outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-        restartLoader();
+        if (position != previousPosition) {
+
+            restartLoader();
+        }
+        previousPosition = position;
     }
 
     @Override
@@ -105,14 +128,12 @@ public class GuessFragment extends Fragment
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 
-        if (data.moveToNext()) {
+        if (!hasData) {
 
-            extractCard(data);
-            presentWord();
+            presentCurrentData(data);
         } else {
 
-            btFindOut.setEnabled(false);
-            clearFields();
+            presentPreviousData();
         }
     }
 
@@ -142,6 +163,7 @@ public class GuessFragment extends Fragment
         public void onClick(View v) {
 
             presentAnswer();
+            state = State.AFTER_FIND_OUT;
         }
     };
 
@@ -202,6 +224,7 @@ public class GuessFragment extends Fragment
         updateCardStatistics(successful);
         displayStatistics();
         disableNextAnswerForTheSameCard();
+        state = State.AFTER_ANSWER;
     }
 
     private void updateCardStatistics(boolean goodAnswer) {
@@ -250,6 +273,41 @@ public class GuessFragment extends Fragment
         btDidNotKnow.setEnabled(enabled);
     }
 
+    private void presentCurrentData(Cursor data) {
+
+        if (data.moveToNext()) {
+
+            extractCard(data);
+            presentWord();
+            state = State.AFTER_LOAD;
+        } else {
+
+            btFindOut.setEnabled(false);
+            clearFields();
+        }
+    }
+
+    private void presentPreviousData() {
+
+        hasData = false;
+        switch (state) {
+
+            case AFTER_LOAD:
+                presentWord();
+                break;
+            case AFTER_FIND_OUT:
+                presentWord();
+                presentAnswer();
+                break;
+            case AFTER_ANSWER:
+                presentWord();
+                presentAnswer();
+                displayStatistics();
+                disableNextAnswerForTheSameCard();
+                break;
+        }
+    }
+
     private void extractCard(Cursor data) {
 
         id = data.getLong(data.getColumnIndex(CardsTable.COLUMN_ID));
@@ -259,8 +317,69 @@ public class GuessFragment extends Fragment
         totalAnswers = data.getInt(data.getColumnIndex(CardsTable.COLUMN_TOTAL_ANSWERS));
     }
 
+    private enum State {
+
+        AFTER_LOAD(0), AFTER_FIND_OUT(1), AFTER_ANSWER(2), UNDEFINED(-1);
+
+        private int code;
+
+        State(int code) {
+
+            this.code = code;
+        }
+
+        static State forCode(int code) {
+
+            switch (code) {
+
+                case 0:
+                    return AFTER_LOAD;
+                case 1:
+                    return AFTER_FIND_OUT;
+                case 2:
+                    return AFTER_ANSWER;
+                default:
+                    return UNDEFINED;
+            }
+        }
+
+        static String key() {
+            return "STATE";
+        }
+    }
+
+    private Loader<Cursor> initLoader() {
+
+        return getLoaderManager().initLoader(0, null, this);
+    }
+
     private void restartLoader() {
 
         getLoaderManager().restartLoader(0, null, this);
+    }
+
+
+    private void read(Bundle savedInstanceState) {
+
+        hasData = true;
+        int code = savedInstanceState.getInt(State.key());
+        state = State.forCode(code);
+        previousPosition = savedInstanceState.getInt(POSITION);
+        motherLanguage = savedInstanceState.getString(CardsTable.COLUMN_MOTHER_LANGUAGE);
+        foreignLanguage = savedInstanceState.getString(CardsTable.COLUMN_FOREIGN_LANGUAGE);
+        goodAnswers = savedInstanceState.getInt(CardsTable.COLUMN_GOOD_ANSWERS);
+        totalAnswers = savedInstanceState.getInt(CardsTable.COLUMN_TOTAL_ANSWERS);
+        id = savedInstanceState.getLong(CardsTable.COLUMN_ID);
+    }
+
+    private void save(Bundle outState) {
+
+        outState.putInt(State.key(), state.code);
+        outState.putInt(POSITION, previousPosition);
+        outState.putString(CardsTable.COLUMN_MOTHER_LANGUAGE, motherLanguage);
+        outState.putString(CardsTable.COLUMN_FOREIGN_LANGUAGE, foreignLanguage);
+        outState.putInt(CardsTable.COLUMN_GOOD_ANSWERS, goodAnswers);
+        outState.putInt(CardsTable.COLUMN_TOTAL_ANSWERS, totalAnswers);
+        outState.putLong(CardsTable.COLUMN_ID, id);
     }
 }
